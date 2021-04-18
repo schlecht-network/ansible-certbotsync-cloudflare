@@ -8,7 +8,7 @@
 
 #certbot_domains:
 #  - example.exam
-
+#certbot_email:
 
 # copy/ansible config
 
@@ -18,7 +18,9 @@
 #chain_copydest:
 #fullchain_copydest:
 #privkey_copydest:
+#aftercopy_restart_services:
+#  - postfix
 local_ansible_user: cloud-user
-destination_user: root
+destination_owner: root
 destination_group: root
 destination_mode: '0600'

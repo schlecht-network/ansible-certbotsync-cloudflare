@@ -1,56 +1,57 @@
 ---
 - name: "distributecerts"
   hosts: distributiongroup
-  vars:
-    {% if cert_copydest is defined %}
-    cert_copydest: {{ cert_copydest }}
-    {% endif %}
-    {% if chain_copydest is defined %}
-    chain_copydest: {{ chain_copydest }}
-    {% endif %}
-    {% if fullchain_copydest is defined %}
-    fullchain_copydest: {{ fullchain_copydest }}
-    {% endif %}
-    {% if privkey_copydest is defined %}
-    privkey_copydest: {{ privkey_copydest }}
-    {% endif %}
-    destination_user: {{ destination_user }}
-    destination_group: {{ destination_group }}
-    destination_mode: {{ destination_mode }}
   tasks:
+{% if cert_copydest is defined %}
     - name: "copy cert.pem"
       become: true
       copy:
-        src: $HOME/cert.pem
+        src: /home/{{ local_ansible_user }}/cert.pem
         dest: {{ cert_copydest }}
         owner: {{ destination_owner }}
         group: {{ destination_group }}
         mode: {{ destination_mode }}
-      when: cert_copydest is defined
+{% endif %}
+{% if chain_copydest is defined %}
     - name: "copy chain.pem"
       become: true
       copy:
-        src: $HOME/chain.pem
+        src: /home/{{ local_ansible_user }}/chain.pem
         dest: {{ chain_copydest }}
         owner: {{ destination_owner }}
         group: {{ destination_group }}
         mode: {{ destination_mode }}
-      when: chain_copydest is defined
+{% endif %}
+{% if fullchain_copydest is defined %}
     - name: "copy fullchain.pem"
       become: true
       copy:
-        src: $HOME/fullchain.pem
+        src: /home/{{ local_ansible_user }}/fullchain.pem
         dest: {{ fullchain_copydest }}
         owner: {{ destination_owner }}
         group: {{ destination_group }}
         mode: {{ destination_mode }}
-      when: fullchain_copydest is defined
+{% endif %}
+{% if privkey_copydest is defined %}
     - name: "copy privkey.pem"
       become: true
       copy:
-        src: $HOME/privkey.pem
+        src: /home/{{ local_ansible_user }}/privkey.pem
         dest: {{ privkey_copydest }}
         owner: {{ destination_owner }}
         group: {{ destination_group }}
         mode: {{ destination_mode }}
-      when: privkey_copydest is defined
+{% endif %}
+{% if aftercopy_restart_services is defined %}
+{% raw %}
+    - name: "restart services"
+      become: true
+      systemd: 
+        name: "{{ item }}"
+        state: restarted
+{% endraw %}
+      with_items:
+{% for service in aftercopy_restart_services %}
+        - {{ service }}
+{% endfor %}
+{% endif %}

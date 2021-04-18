@@ -2,7 +2,9 @@
 - name: "Ensure certbot is installed"
   become: true
   apt:
-    name: certbot python3-certbot-dns-cloudflare
+    name: 
+      - certbot
+      - python3-certbot-dns-cloudflare
     state: latest
 
 - name: "Ensure Ansible is installed"
@@ -53,11 +55,11 @@
     dest: "/etc/letsencrypt/distributecerts.sh"
     owner: root
     group: root
-    mode: '0644'
+    mode: '0744'
 
 - name: "Request cert"
   become: true
-  shell: certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/cloudflare.ini -d {{ certbot_domains|join(',') }} --preferred-challenges dns-01 --post-hook /etc/letsencrypt/distributecerts.sh
+  shell: certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/cloudflare.ini -d {{ certbot_domains|join(',') }} --preferred-challenges dns-01 --post-hook /etc/letsencrypt/distributecerts.sh --non-interactive --agree-tos -m {{ certbot_email }}
   when: not done.stat.exists
 
 - name: "Create done file"
@@ -67,6 +69,11 @@
     state: touch
     mode: '0644'
   when: not done.stat.exists
+
+- name: "Execute distribution script"
+  become: true
+  shell: "/etc/letsencrypt/distributecerts.sh"
+  when: done.stat.exists
 
 - name: "Ensure certbot timer is started/enabled"
   systemd:
