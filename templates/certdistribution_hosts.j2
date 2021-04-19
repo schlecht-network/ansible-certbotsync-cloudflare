@@ -2,3 +2,8 @@
 {% for host in target_hosts %}
 {{ host }}
 {% endfor %}
+
+{% if ( strict_hostkeychecking is defined ) and ( strict_hostkeychecking == false ) %}
+[distributiongroup:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+{% endif %}
