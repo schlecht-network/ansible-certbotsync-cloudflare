@@ -1,8 +1,8 @@
 #/bin/bash
 
-cp /etc/letsencrypt/live/{{ certbot_domains[0] }}/*.pem /home/{{ local_ansible_user }}/
+cp /etc/letsencrypt/live/{{ item.certbot_domains[0] }}/*.pem /home/{{ local_ansible_user }}/
 chown {{ local_ansible_user }} /home/{{ local_ansible_user }}/*.pem
 
-runuser -u {{ local_ansible_user }} -- ansible-playbook /etc/ansible/certdistribution.yml -i /etc/ansible/certdistribution_hosts
+runuser -u {{ local_ansible_user }} -- ansible-playbook /etc/ansible/{{ item.name }}_certdistribution.yml -i /etc/ansible/{{ item.name }}_certdistribution_hosts
 
 rm -f /home/{{ local_ansible_user }}/*.pem

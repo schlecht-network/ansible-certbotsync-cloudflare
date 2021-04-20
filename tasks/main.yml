@@ -4,7 +4,12 @@
   apt:
     name: 
       - certbot
-      - python3-certbot-dns-cloudflare
+    state: latest
+  
+- name: "Ensure certbot-dns-cloudflare is installed"
+  snap:
+    name:
+      - certbot-dns-cloudflare
     state: latest
 
 - name: "Ensure Ansible is installed"
@@ -13,17 +18,25 @@
     name: ansible
     state: latest
 
-- name: "Create Ansible files"
+- name: "Create Ansible playbook"
   become: true
   template:
-    src: "{{ item }}.j2"
-    dest: "/etc/ansible/{{ item }}"
+    src: "certdistribution.yml.j2"
+    dest: "/etc/ansible/{{ item.name }}_certdistribution.yml"
     owner: root
     group: root
     mode: '0644'
-  with_items:
-    - certdistribution.yml
-    - certdistribution_hosts
+  loop: "{{ certificates }}"
+
+- name: "Create Ansible hostsfile"
+  become: true
+  template:
+    src: "certdistribution_hosts.j2"
+    dest: "/etc/ansible/{{ item.name }}_certdistribution_hosts"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ certificates }}"
 
 - name: "Create /root/.secrets"
   become: true
@@ -38,42 +51,48 @@
   become: true
   template:
     src: "cloudflare.ini.j2"
-    dest: "/root/.secrets/cloudflare.ini"
+    dest: "/root/.secrets/{{ item.name }}_cloudflare.ini"
     owner: root
     group: root
     mode: '0600'
+  loop: "{{ certificates }}"
 
 - name: "Check if cert has already been requested"
   stat:
-    path: "/etc/letsencrypt/done"
-  register: done
+    path: "/etc/letsencrypt/{{ item.name }}_done"
+  loop: "{{ certificates }}"
+  register: check_done
 
-- name: "Create posthook script"
+- name: "Create posthook scripts"
   become: true
   template:
     src: "distributecerts.sh.j2"
-    dest: "/etc/letsencrypt/distributecerts.sh"
+    dest: "/etc/letsencrypt/{{ item.name }}_distributecerts.sh"
     owner: root
     group: root
     mode: '0744'
+  loop: "{{ certificates }}"
 
 - name: "Request cert"
   become: true
-  shell: certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/cloudflare.ini -d {{ certbot_domains|join(',') }} --preferred-challenges dns-01 --post-hook /etc/letsencrypt/distributecerts.sh --non-interactive --agree-tos -m {{ certbot_email }}
-  when: not done.stat.exists
+  shell: certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/{{ item.item.name }}_cloudflare.ini -d {{ item.item.certbot_domains|join(',') }} --preferred-challenges dns-01 --post-hook /etc/letsencrypt/{{ item.item.name }}_distributecerts.sh --non-interactive --agree-tos -m {{ item.item.certbot_email }}
+  loop: "{{ check_done.results }}"
+  when: not item.stat.exists
 
 - name: "Create done file"
   become: true
   file:
-    path: "/etc/letsencrypt/done"
+    path: "/etc/letsencrypt/{{ item.item.name }}_done"
     state: touch
     mode: '0644'
-  when: not done.stat.exists
+  loop: "{{ check_done.results }}"
+  when: not item.stat.exists
 
 - name: "Execute distribution script"
   become: true
-  shell: "/etc/letsencrypt/distributecerts.sh"
-  when: done.stat.exists
+  shell: "/etc/letsencrypt/{{ item.item.name }}_distributecerts.sh"
+  loop: "{{ check_done.results }}"
+  when: item.stat.exists
 
 - name: "Ensure certbot timer is started/enabled"
   systemd:

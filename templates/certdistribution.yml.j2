@@ -1,48 +1,48 @@
 ---
 - name: "distributecerts"
-  hosts: distributiongroup
+  hosts: sshdistributiongroup
   tasks:
-{% if cert_copydest is defined %}
+{% if item.cert_copydest is defined %}
     - name: "copy cert.pem"
       become: true
       copy:
         src: /home/{{ local_ansible_user }}/cert.pem
-        dest: {{ cert_copydest }}
-        owner: {{ destination_owner }}
-        group: {{ destination_group }}
-        mode: {{ destination_mode }}
+        dest: {{ item.cert_copydest }}
+        owner: {{ item.destination_owner }}
+        group: {{ item.destination_group }}
+        mode: {{ item.destination_mode }}
 {% endif %}
-{% if chain_copydest is defined %}
+{% if item.chain_copydest is defined %}
     - name: "copy chain.pem"
       become: true
       copy:
         src: /home/{{ local_ansible_user }}/chain.pem
-        dest: {{ chain_copydest }}
-        owner: {{ destination_owner }}
-        group: {{ destination_group }}
-        mode: {{ destination_mode }}
+        dest: {{ item.chain_copydest }}
+        owner: {{ item.destination_owner }}
+        group: {{ item.destination_group }}
+        mode: {{ item.destination_mode }}
 {% endif %}
-{% if fullchain_copydest is defined %}
+{% if item.fullchain_copydest is defined %}
     - name: "copy fullchain.pem"
       become: true
       copy:
         src: /home/{{ local_ansible_user }}/fullchain.pem
-        dest: {{ fullchain_copydest }}
-        owner: {{ destination_owner }}
-        group: {{ destination_group }}
-        mode: {{ destination_mode }}
+        dest: {{ item.fullchain_copydest }}
+        owner: {{ item.destination_owner }}
+        group: {{ item.destination_group }}
+        mode: {{ item.destination_mode }}
 {% endif %}
-{% if privkey_copydest is defined %}
+{% if item.privkey_copydest is defined %}
     - name: "copy privkey.pem"
       become: true
       copy:
         src: /home/{{ local_ansible_user }}/privkey.pem
-        dest: {{ privkey_copydest }}
-        owner: {{ destination_owner }}
-        group: {{ destination_group }}
-        mode: {{ destination_mode }}
+        dest: {{ item.privkey_copydest }}
+        owner: {{ item.destination_owner }}
+        group: {{ item.destination_group }}
+        mode: {{ item.destination_mode }}
 {% endif %}
-{% if aftercopy_restart_services is defined %}
+{% if item.aftercopy_restart_services is defined %}
 {% raw %}
     - name: "restart services"
       become: true
@@ -51,7 +51,7 @@
         state: restarted
 {% endraw %}
       with_items:
-{% for service in aftercopy_restart_services %}
+{% for service in item.aftercopy_restart_services %}
         - {{ service }}
 {% endfor %}
 {% endif %}

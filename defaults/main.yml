@@ -1,26 +1,31 @@
-# cloudflare config
-
-#cloudflare_email: email@example.exam
-#cloudflare_api_token: someverylongapikey12894782375
-
-
 # certbot config
 
-#certbot_domains:
-#  - example.exam
-#certbot_email:
+#certificates:
+#  - name: "example"
+#    certbot_domains:
+#      - "example.exam"
+#      - "*.example.exam"
+#    certbot_email: "example@examplemail.exam"
+#    cloudflare_email: "email.example.exam"
+#    cloudflare_api_token: "someverylongapikey12894782375"
+#    ssh_target_hosts:
+#      - host1
+#    cert_copydest:
+#    chain_copydest:
+#    fullchain_copydest:
+#    privkey_copydest:
+#    aftercopy_restart_services:
+#      - postfix
+#    destination_owner: root
+#    destination_group: root
+#    destination_mode: '0600'
 
-# copy/ansible config
 
-#target_hosts:
-#  - host1
-#cert_copydest:
-#chain_copydest:
-#fullchain_copydest:
-#privkey_copydest:
-#aftercopy_restart_services:
-#  - postfix
+# global_defaults
+
 local_ansible_user: cloud-user
-destination_owner: root
-destination_group: root
-destination_mode: '0600'
+
+
+# extraoptions
+
+# strict_hostkeychecking: false
