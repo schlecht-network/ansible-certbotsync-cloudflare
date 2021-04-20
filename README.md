@@ -2,6 +2,7 @@
 
 This role allows to automatically deploy lets encrypt certificates to multiple machines or to be more specific it prepares a ubuntu server machine to do that.
 
+```
 certificates:
   - name: "example"                                         #descriptive name for this certificate
     certbot_domains:                                        #domains/subdomains to request a cert for
@@ -30,3 +31,4 @@ local_ansible_user:                                         #username for execut
 
 
 strict_hostkeychecking: false/true                          #option for disabling strict host key checking (global option)
+```
