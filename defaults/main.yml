@@ -1,31 +1,3 @@
-# certbot config
-
-#certificates:
-#  - name: "example"
-#    certbot_domains:
-#      - "example.exam"
-#      - "*.example.exam"
-#    certbot_email: "example@examplemail.exam"
-#    cloudflare_email: "email.example.exam"
-#    cloudflare_api_token: "someverylongapikey12894782375"
-#    ssh_target_hosts:
-#      - host1
-#    cert_copydest:
-#    chain_copydest:
-#    fullchain_copydest:
-#    privkey_copydest:
-#    aftercopy_restart_services:
-#      - postfix
-#    destination_owner: root
-#    destination_group: root
-#    destination_mode: '0600'
-
-
 # global_defaults
 
 local_ansible_user: cloud-user
-
-
-# extraoptions
-
-# strict_hostkeychecking: false
