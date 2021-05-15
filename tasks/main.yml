@@ -102,9 +102,3 @@
   shell: "/etc/letsencrypt/{{ item.item.name }}_distributecerts.sh"
   loop: "{{ check_done.results }}"
   when: item.stat.exists
-
-- name: "Ensure certbot timer is started/enabled"
-  systemd:
-    name: certbot.timer
-    state: started
-    enabled: yes
