@@ -4,10 +4,24 @@
   snap:
     name: certbot
     classic: yes
-  
+
+- name: "Check if certbot has already been trusted"
+  stat:
+    path: "/etc/letsencrypt/snapdtrustdone"
+  register: check_snapdtrustdone
+
 - name: "Trust certbot with root"
   become: true
   shell: snap set certbot trust-plugin-with-root=ok
+  when: not check_snapdtrustdone.stat.exists
+
+- name: "Create done file for Trust certbot with root"
+  become: true
+  file:
+    path: "/etc/letsencrypt/snapdtrustdone"
+    state: touch
+    mode: '0644'
+  when: not check_snapdtrustdone.stat.exists
   
 - name: "Ensure certbot-dns-cloudflare is installed"
   become: true
