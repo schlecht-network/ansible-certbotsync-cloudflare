@@ -9,7 +9,6 @@ certificates:
       - "example.exam"
       - "*.example.exam"
     certbot_email: "example@examplemail.exam"               #email address for letsencrypt
-    cloudflare_email: "email.example.exam"                  #cloudflare login email address
     cloudflare_api_token: "someverylongapikey12894782375"   #cloudflare api toke (not global api key!!!)
     ssh_target_hosts:                                       #target ssh hosts to push certificates to
       - host1
