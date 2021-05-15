@@ -1,16 +1,26 @@
 ---
 - name: "Ensure certbot is installed"
   become: true
-  apt:
-    name: 
-      - certbot
-    state: latest
+  snap:
+    name: certbot
+    classic: yes
+  
+- name: "Trust certbot with root"
+  become: true
+  cmd: snap set certbot trust-plugin-with-root=ok
   
 - name: "Ensure certbot-dns-cloudflare is installed"
+  become: true
   snap:
-    name:
-      - certbot-dns-cloudflare
-    state: latest
+    name: certbot-dns-cloudflare
+
+- name: "Create symlink for certbot binary"
+  ansible.builtin.file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    owner: root
+    group: root
+    state: link
 
 - name: "Ensure Ansible is installed"
   become: true
