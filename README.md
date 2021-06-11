@@ -21,6 +21,10 @@ certificates:
     ssh_destination_mode: '0600'                            #mode (access permissions) of the copied files (on ssh target machine)
     aftercopy_ssh_restart_services:                         #services to restart after copying (on ssh target machine)
       - postfix
+    netscaler:
+      nsip: x.x.x.x                                 #nsip of a citrix netscaler (for netscaler target machine)
+      user: nsroot                                  #netscaler user name (for netscaler target machine)
+      pass: nsroot                                  #netsclaer password (for netscaler target machine)
   - name: "example2"
     certbot_domains:
     ...

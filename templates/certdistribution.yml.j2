@@ -55,3 +55,16 @@
         - {{ service }}
 {% endfor %}
 {% endif %}
+{% if item.netscaler is defined %}
+    - name: "deploy cert to netscaler"
+      delegate_to: localhost
+      community.network.netscaler_ssl_certkey:
+        nitro_user: {{ item.netscaler.user }}
+        nitro_pass: {{ item.netscaler.pass }}
+        nsip: {{ item.netscaler.nsip }}
+        certkey: {{ item.name }}_certkey
+        cert: /home/{{ local_ansible_user }}/fullchain.pem
+        key: /home/{{ local_ansible_user }}/privkey.pem
+        expirymonitor: disabled
+        password: false
+{% endif %}
