@@ -1,6 +1,7 @@
 #/bin/bash
 
 cp /etc/letsencrypt/live/{{ item.certbot_domains[0] }}/*.pem /home/{{ local_ansible_user }}/
+openssl rsa -in /home/{{ local_ansible_user }}/privkey.pem -out /home/{{ local_ansible_user }}/nsprivkey.pem
 chown {{ local_ansible_user }} /home/{{ local_ansible_user }}/*.pem
 
 runuser -u {{ local_ansible_user }} -- ansible-playbook /etc/ansible/{{ item.name }}_certdistribution.yml -i /etc/ansible/{{ item.name }}_certdistribution_hosts

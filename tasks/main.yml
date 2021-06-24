@@ -35,6 +35,17 @@
     dest: /usr/bin/certbot
     state: link
 
+- name: "Ensure pip is installed"
+  become: true
+  apt:
+    name: pip
+    state: latest
+
+- name: "Ensure nitrosdk-python is installed"
+  become: true
+  pip:
+    name: nitrosdk-python
+
 - name: "Ensure Ansible is installed"
   become: true
   apt:

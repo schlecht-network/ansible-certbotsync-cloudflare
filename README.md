@@ -24,7 +24,8 @@ certificates:
     netscaler:
       nsip: x.x.x.x                                 #nsip of a citrix netscaler (for netscaler target machine)
       user: nsroot                                  #netscaler user name (for netscaler target machine)
-      pass: nsroot                                  #netsclaer password (for netscaler target machine)
+      pass: nsroot                                  #netscaler password (for netscaler target machine)
+      validate_certs: no                            #validate netscaler certificate (for netscaler target machine)
   - name: "example2"
     certbot_domains:
     ...

@@ -56,15 +56,28 @@
 {% endfor %}
 {% endif %}
 {% if item.netscaler is defined %}
+    - name: "copy cert to netscaler"
+      become: true
+      copy:
+        src: /home/{{ local_ansible_user }}/fullchain.pem
+        dest: /nsconfig/ssl/{{ item.name }}-fullchain.pem
+    - name: "copy privkey to netscaler"
+      become: true
+      copy:
+        src: /home/{{ local_ansible_user }}/nsprivkey.pem
+        dest: /nsconfig/ssl/{{ item.name }}-privkey.pem
     - name: "deploy cert to netscaler"
       delegate_to: localhost
-      community.network.netscaler_ssl_certkey:
+      netscaler_ssl_certkey:
         nitro_user: {{ item.netscaler.user }}
         nitro_pass: {{ item.netscaler.pass }}
         nsip: {{ item.netscaler.nsip }}
-        certkey: {{ item.name }}_certkey
-        cert: /home/{{ local_ansible_user }}/fullchain.pem
-        key: /home/{{ local_ansible_user }}/privkey.pem
+        certkey: {{ item.name }}_letsencrypt
+        cert: {{ item.name }}-fullchain.pem
+        key: {{ item.name }}-privkey.pem
         expirymonitor: disabled
         password: false
+        nitro_protocol: https
+        validate_certs: {{ item.netscaler.validate_certs }}
+        passplain: false
 {% endif %}
