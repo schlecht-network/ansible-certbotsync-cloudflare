@@ -1,5 +1,10 @@
 ---
-- name: "Ensure certbot is installed"
+- name: "Create /etc/letsencrypt"
+  file:
+    path: /etc/letsencrypt
+    state: directory
+    
+- name: "Ensure snap certbot is installed"
   become: true
   snap:
     name: certbot
