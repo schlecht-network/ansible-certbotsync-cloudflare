@@ -1,5 +1,5 @@
-{% if ssh_target_hosts is defined %}
-[sshdistributiongroup]
+{% if item.ssh_target_hosts is defined %}
+[distributiongroup]
 {% for host in item.ssh_target_hosts %}
 {{ host }}
 {% endfor %}

@@ -24,10 +24,12 @@ certificates:
     aftercopy_ssh_restart_services:                         #services to restart after copying (on ssh target machine)
       - postfix
     netscaler:
-      nsip: x.x.x.x                                 #nsip of a citrix netscaler (for netscaler target machine)
-      user: nsroot                                  #netscaler user name (for netscaler target machine)
-      pass: nsroot                                  #netscaler password (for netscaler target machine)
-      validate_certs: no                            #validate netscaler certificate (for netscaler target machine)
+      - nsip: x.x.x.x                                 #nsip of a citrix netscaler (for netscaler target machine) NOTE: if you use ipv6 use a dns name cause borken
+        user: nsroot                                  #netscaler user name (for netscaler target machine)
+        pass: nsroot                                  #netscaler password (for netscaler target machine)
+        validate_certs: no                            #validate netscaler certificate (for netscaler target machine)
+      - nsip: y.y.y.y
+        ...
   - name: "example2"
     certbot_domains:
     ...
