@@ -1,7 +1,9 @@
+{% if ssh_target_hosts is defined %}
 [sshdistributiongroup]
 {% for host in item.ssh_target_hosts %}
 {{ host }}
 {% endfor %}
+{% endif %}
 
 {% if ( strict_hostkeychecking is defined ) and ( strict_hostkeychecking == false ) %}
 [sshdistributiongroup:vars]

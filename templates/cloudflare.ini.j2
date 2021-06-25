@@ -1,1 +1,10 @@
+{% ( if item.cloudflare_email is defined ) and ( if item.cloudflare_api_key is defined ) and ( if item.cloudflare_api_token is not defined ) %}
+# With global api key:
+dns_cloudflare_email = "{{ item.cloudflare_email }}"
+dns_cloudflare_api_key = "{{ item.cloudflare_api_key }}"
+{% endif %}
+
+{% ( if item.cloudflare_email is not defined ) and ( if item.cloudflare_api_key is not defined ) and ( if item.cloudflare_api_token is defined ) %}
+# With token (comment out both lines above and uncomment below):
 dns_cloudflare_api_token = "{{ item.cloudflare_api_token }}"
+{% endif %}
