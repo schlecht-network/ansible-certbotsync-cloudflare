@@ -1,26 +1,3 @@
-# cloudflare config
+# global_defaults
 
-#cloudflare_email: email@example.exam
-#cloudflare_api_token: someverylongapikey12894782375
-
-
-# certbot config
-
-#certbot_domains:
-#  - example.exam
-#certbot_email:
-
-# copy/ansible config
-
-#target_hosts:
-#  - host1
-#cert_copydest:
-#chain_copydest:
-#fullchain_copydest:
-#privkey_copydest:
-#aftercopy_restart_services:
-#  - postfix
 local_ansible_user: cloud-user
-destination_owner: root
-destination_group: root
-destination_mode: '0600'

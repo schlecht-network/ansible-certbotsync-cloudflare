@@ -1,2 +1,8 @@
-dns_cloudflare_email = "{{ cloudflare_email }}"
-dns_cloudflare_api_key = "{{ cloudflare_api_token }}"
+{% if ( item.cloudflare_email is defined ) and ( item.cloudflare_api_key is defined ) and ( item.cloudflare_api_token is not defined ) %}
+dns_cloudflare_email = "{{ item.cloudflare_email }}"
+dns_cloudflare_api_key = "{{ item.cloudflare_api_key }}"
+{% endif %}
+
+{% if ( item.cloudflare_email is not defined ) and ( item.cloudflare_api_key is not defined ) and ( item.cloudflare_api_token is defined ) %}
+dns_cloudflare_api_token = "{{ item.cloudflare_api_token }}"
+{% endif %}

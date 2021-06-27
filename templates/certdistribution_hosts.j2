@@ -1,9 +1,11 @@
+{% if item.ssh_target_hosts is defined %}
 [distributiongroup]
-{% for host in target_hosts %}
+{% for host in item.ssh_target_hosts %}
 {{ host }}
 {% endfor %}
+{% endif %}
 
 {% if ( strict_hostkeychecking is defined ) and ( strict_hostkeychecking == false ) %}
-[distributiongroup:vars]
+[sshdistributiongroup:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 {% endif %}
