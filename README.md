@@ -18,6 +18,7 @@ certificates:
     chain_ssh_copydest:                                     #destination path for the chain file (on ssh target machine)
     fullchain_ssh_copydest:                                 #destination path for the fullchain file (on ssh target machine)
     privkey_ssh_copydest:                                   #destination path for the privkey file (on ssh target machine)
+    haproxycertkey_ssh_copydest:                            #destination path for the haproxycertkey file (on ssh target machine)
     ssh_destination_owner: root                             #owner of the copied files (on ssh target machine)
     ssh_destination_group: root                             #group of the copied files (on ssh target machine)
     ssh_destination_mode: '0600'                            #mode (access permissions) of the copied files (on ssh target machine)

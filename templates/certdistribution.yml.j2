@@ -42,6 +42,16 @@
         group: {{ item.ssh_destination_group }}
         mode: {{ item.ssh_destination_mode }}
 {% endif %}
+{% if item.haproxycertkey_ssh_copydest is defined %}
+    - name: "copy haproxycertkey.pem"
+      become: true
+      copy:
+        src: /home/{{ local_ansible_user }}/haproxycertkey.pem
+        dest: {{ item.haproxycertkey_ssh_copydest }}
+        owner: {{ item.ssh_destination_owner }}
+        group: {{ item.ssh_destination_group }}
+        mode: {{ item.ssh_destination_mode }}
+{% endif %}
 {% if item.aftercopy_ssh_restart_services is defined %}
 {% raw %}
     - name: "restart services"
